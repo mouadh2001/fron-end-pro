@@ -1,0 +1,234 @@
+body {
+  font-family: "Arial", sans-serif;
+  background: #1a1a1a;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.game-container {
+  display: flex;
+  gap: 20px;
+  max-width: 1200px;
+}
+
+.arena-container {
+  background: #333;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Replace .arena-grid with */
+.arena-table {
+  border-collapse: collapse;
+  margin: 0 auto;
+  background: #333;
+}
+
+.arena-table td {
+  width: 80px;
+  height: 80px;
+  border: 1px solid #444;
+  position: relative;
+  cursor: pointer;
+}
+
+.arena-table td.floor {
+  background: #109416;
+}
+
+.arena-table td.obstacle {
+  background: #a74e0f;
+}
+
+.arena-table td.spectial {
+  background: #b3ff39;
+}
+
+.hero {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+  z-index: 10;
+}
+
+.hero.knight {
+  background-image: url("../assets/heroes/knight.png");
+}
+
+.hero.ninja {
+  background-image: url("../assets/heroes/ninja.png");
+}
+
+.hero.wizard {
+  background-image: url("../assets/heroes/wizard.png");
+}
+.hero.archer {
+  background-image: url("../assets/heroes/archer.png");
+}
+
+.ui-panel {
+  background: #222;
+  padding: 20px;
+  border-radius: 10px;
+  width: 370px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.hero-info {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
+.hero-portrait {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #444;
+  border: 3px solid #666;
+  background-repeat: no-repeat; /* Prevents tiling */
+  background-size: contain; /* Fits image within element */
+  background-position: center center; /* Centers the single image */
+}
+
+.health-bar {
+  width: 100%;
+  height: 20px;
+  background: #444;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 5px 0;
+}
+
+.health-fill {
+  height: 100%;
+  width: 100%;
+  background: #d33;
+  transition: width 0.3s;
+}
+
+.action-buttons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.action-buttons button {
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #8fb843;
+  color: #112212;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.action-buttons button:hover {
+  background: #384923;
+}
+
+.action-buttons button:active {
+  background: #e4dd7d;
+}
+
+.game-log {
+  background: #111;
+  padding: 10px;
+  border-radius: 5px;
+  height: 200px;
+  width: 370px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.game-log p {
+  margin: 5px 0;
+}
+
+.hero-selection {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+
+.hero-options {
+  display: flex;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.hero-option {
+  background: #333;
+  padding: 20px;
+  border-radius: 10px;
+  width: 180px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.hero-option:hover {
+  transform: scale(1.05);
+  background: #444;
+}
+
+.hero-option img {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+/* Add this to your existing hero-selection styles */
+.end-game-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.9);
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  color: white;
+  text-align: center;
+}
+
+.end-game-screen h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px gold;
+}
+
+#victory-screen h1 {
+  color: #4caf50; /* Green */
+}
+
+#defeat-screen h1 {
+  color: #f44336; /* Red */
+}

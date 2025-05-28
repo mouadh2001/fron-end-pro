@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Arène des Légendes</title>
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="game-container">
+      <div class="arena-container">
+        <div class="arena-container">
+          <table id="arena" class="arena-table">
+            <!-- Rows will be generated dynamically -->
+          </table>
+        </div>
+      </div>
+
+      <div class="ui-panel">
+        <div class="hero-info">
+          <div class="hero-portrait"></div>
+          <div class="hero-stats">
+            <h3 id="hero-name">Select Hero</h3>
+            <div class="health-bar">
+              <div class="health-fill"></div>
+            </div>
+            <p>
+              HP: <span id="hero-hp">-</span>/<span id="hero-max-hp">-</span>
+            </p>
+            <p>Special: <span id="hero-special">Ready</span></p>
+          </div>
+        </div>
+
+        <div class="action-buttons">
+          <button id="btn-move">Move</button>
+          <button id="btn-attack">Attack</button>
+          <button id="btn-special">Special</button>
+          <button id="btn-defend">Defend</button>
+          <button id="btn-end">End Turn</button>
+        </div>
+
+        <div class="game-log" id="game-log">
+          <p>Welcome to Arène des Légendes!</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-selection" id="hero-selection">
+      <h2>Choose Your Hero</h2>
+      <div class="hero-options">
+        <div class="hero-option" data-hero="knight">
+          <img src="assets/heroes/knight.png" alt="Knight" />
+          <h3>Knight</h3>
+          <p>Strong melee fighter with high defense</p>
+          <p>Moves : 1</p>
+          <p>Attack damage : 25</p>
+          <p>Max Hp : 120</p>
+          <p>Armor : 15</p>
+          <p>Try to get closer to your enemyies as fast as possible !!</p>
+        </div>
+        <div class="hero-option" data-hero="ninja">
+          <img src="assets/heroes/ninja.png" alt="Ninja" />
+          <h3>Ninja</h3>
+          <p>Fast attacker with dodge ability</p>
+          <p>Moves : 2</p>
+          <p>Attack damage : 20</p>
+          <p>Max Hp : 80</p>
+          <p>Armor : 8</p>
+          <p>Don't stay in same position too long !!</p>
+        </div>
+        <div class="hero-option" data-hero="archer">
+          <img src="assets/heroes/archer.png" alt="archer" />
+          <h3>Archer</h3>
+          <p>Hight ranged attacks and global range ability</p>
+          <p>Moves : 1</p>
+          <p>Attack damage : 15</p>
+          <p>Max Hp : 60</p>
+          <p>Armor : 5</p>
+          <p>Don't stay in same position too long !!</p>
+        </div>
+        <div class="hero-option" data-hero="wizard">
+          <img src="assets/heroes/wizard.png" alt="Wizard" />
+          <h3>Wizard</h3>
+          <p>Powerful ranged attacks</p>
+          <p>Moves : 1</p>
+          <p>Attack damage : 30</p>
+          <p>Max Hp : 70</p>
+          <p>Armor : 5</p>
+          <p>Don't let the ennemyes get closer to you !!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add these right before closing </body> -->
+    <div id="victory-screen" class="end-game-screen">
+      <h1>Victory!</h1>
+    </div>
+
+    <div id="defeat-screen" class="end-game-screen">
+      <h1>Defeat!</h1>
+    </div>
+
+    <script src="js/hero.js"></script>
+    <script src="js/arena.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/ui.js"></script>
+  </body>
+</html>
