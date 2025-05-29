@@ -30,36 +30,43 @@ class Hero {
   }
 
   takeDamage(damage) {
+    //---------------------------------------
+    //si is defending le dégat decrice l edégat
     if (this.isDefending) {
-      damage = Math.floor(damage * 0.5);
-      this.isDefending = false;
+      damage = damage - this.defense;
+      // le degat ne peut pas etre negatif
+      if (damage < 0) damage = 0;
     }
-
     this.hp -= damage;
     if (this.hp < 0) this.hp = 0;
-
     return damage;
+    //------------------------------------------
   }
 
   useSpecial() {
+    //------------------------------------------
     if (this.currentSpecialCooldown === 0) {
       this.currentSpecialCooldown = this.specialCooldown;
       return true;
     }
     return false;
+    //si le coul down = 0 oui le hero peut utiliser son special
+    //-------------------------------------------
   }
 
   endTurn() {
-    console.log("hh");
+    //-----------------------------------
     if (this.type === "ninja") {
-      this.attack = 20;
-    } else if (this.type === "knight") {
       this.attack = 25;
+    } else if (this.type === "knight") {
+      this.attack = 30;
     }
     if (this.currentSpecialCooldown > 0) {
       this.currentSpecialCooldown--;
     }
     this.isDefending = false;
+    //reinitiaise le defence , l'attack pour ninja et knight , decrise le couldown
+    //------------------------------------
   }
 
   isAlive() {
@@ -69,7 +76,7 @@ class Hero {
 
 class Knight extends Hero {
   constructor() {
-    super("knight", "Player Knight", 120, 25, 15, 1, 1, 3, "Ai Knight");
+    super("knight", "Player Knight", 120, 30, 15, 1, 1, 3, "Ai Knight");
   }
 
   warCry() {
@@ -93,7 +100,7 @@ class Archer extends Hero {
 
 class Ninja extends Hero {
   constructor() {
-    super("ninja", "Player Ninja", 80, 20, 8, 2, 1, 3, "Ai Ninja");
+    super("ninja", "Player Ninja", 90, 25, 10, 2, 1, 3, "Ai Ninja");
   }
 
   doubleAttack() {
@@ -105,13 +112,15 @@ class Ninja extends Hero {
   }
 
   attemptDodge() {
-    return Math.random() < 0.6; // 60% chance to dodge
+    //------------------------------
+    return Math.random() < 0.6; // 60% chance de dodge
   }
+  //------------------------------
 }
 
 class Wizard extends Hero {
   constructor() {
-    super("wizard", "Player Wizard", 70, 30, 5, 1, 3, 3, "Ai Wizard");
+    super("wizard", "Player Wizard", 60, 20, 5, 1, 3, 3, "Ai Wizard");
   }
 
   magicStorm() {

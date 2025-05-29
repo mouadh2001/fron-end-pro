@@ -4,7 +4,7 @@ class Game {
     this.ui = new UI(this);
     this.gameState = "hero-selection";
     this.selectedAction = null;
-    this.selectedHero = null;
+    // affichage de selection hero menu
     this.ui.showHeroSelection();
     this.playerPlayFirst = false;
     this.computerPlayFirst = false;
@@ -28,14 +28,14 @@ class Game {
         break;
     }
     this.arena.addHero(playerHero, 0, 0);
+    this.arena.addHero(new Knight(), 0, 6);
     // this.arena.addHero(new Archer(), 6, 0);
     // this.arena.addHero(new Wizard(), 6, 6);
-    this.arena.addHero(new Knight(), 0, 6);
 
     this.gameState = "playing";
     this.ui.hideHeroSelection();
     this.ui.updateUI();
-    this.ui.addToLog(`Game started! You are playing as ${playerHero.name}.`);
+    this.ui.addToLog(`Game started! You are ${playerHero.name}.`);
     this.rollDiceForFirstTurn();
   }
 
@@ -133,6 +133,9 @@ class Game {
     if (this.selectedAction === "move" && correctMove) {
       const moved = this.arena.moveHero(currentHero, x, y);
       if (moved) {
+        let message = "";
+        message = `${currentHero.name} changes position`;
+        this.ui.addToLog(message);
         this.endTurn();
       }
     } else if (this.selectedAction === "attack") {
@@ -177,10 +180,10 @@ class Game {
     const roll = Math.floor(Math.random() * 6) + 1;
     if (roll === 6) {
       damage *= 2;
-      message = `Critical hit! `;
+      message = `Critical hit! got ${roll} `;
     } else if (roll <= 2) {
       damage = 0;
-      message = `${attackerName} missed!`;
+      message = `${attackerName} missed! got ${roll} `;
     }
     if (defender.type === "ninja" && defender.attemptDodge()) {
       damage = 0;
@@ -217,7 +220,6 @@ class Game {
   }
 
   endTurn() {
-    console.log("gg");
     document.getElementById("btn-attack").style.display = "flex";
     document.getElementById("btn-special").style.display = "flex";
     if (this.arena.checkGameOver()) {
@@ -257,13 +259,12 @@ class Game {
         targetName = target.nameAi;
       }
 
-      const damage = Math.floor(archer.attack * 0.7);
+      const damage = Math.floor(archer.attack * 1.2);
       const actualDamage = target.takeDamage(damage);
-      this.ui.addToLog(
-        `${targetName} takes ${actualDamage} damage from the wave!`
-      );
+      let message = "";
+      message = `${targetName} takes ${actualDamage} damage from the wave!`;
       if (!target.isAlive()) {
-        this.ui.addToLog(`${targetName} has been defeated!`);
+        message += ` ${targetName} has been defeated!`;
         if (target === this.arena.heroes[0]) {
           this.gameState = "Game Over";
           this.showDefeatScreen();
@@ -271,6 +272,7 @@ class Game {
             document.getElementById("defeat-screen").style.display = "none";
           }, 3000);
         }
+        this.ui.addToLog(message);
         this.arena.removeHero(target);
       }
     });
@@ -278,12 +280,15 @@ class Game {
   }
 
   castMagicStorm(wizard) {
+    //--------------------------------------
+    //utilise plyer ou ai
     let wizardName = "";
     if (wizard === this.arena.heroes[0]) {
       wizardName = wizard.name;
     } else {
       wizardName = wizard.nameAi;
     }
+    // selon le range recupere les targets
     const targets = this.arena.heroes.filter(
       (hero) =>
         hero !== wizard &&
@@ -291,110 +296,146 @@ class Game {
         Math.abs(hero.position.x - wizard.position.x) <= 3 &&
         Math.abs(hero.position.y - wizard.position.y) <= 3
     );
-
     this.ui.addToLog(`${wizardName} casts Magic Storm!`);
     let targetName = "";
-
+    //applique le degt de spectial sur chaque hero
     targets.forEach((target) => {
+      //on utilise player ou ai
       if (target === this.arena.heroes[0]) {
         targetName = target.name;
       } else {
         targetName = target.nameAi;
       }
-
-      const damage = Math.floor(wizard.attack * 0.7);
+      const damage = Math.floor(wizard.attack * 1.2);
       const actualDamage = target.takeDamage(damage);
-      this.ui.addToLog(
-        `${targetName} takes ${actualDamage} damage from the storm!`
-      );
+      let message = "";
+      message = `${targetName} takes ${actualDamage} damage from the storm!`;
+      // si le spectial a tuer un hero
       if (!target.isAlive()) {
-        this.ui.addToLog(`${targetName} has been defeated!`);
+        message += ` ${targetName} has been defeated!`;
+        //si le hero tuer est de player
         if (target === this.arena.heroes[0]) {
+          //chenger le gemestate pour que le ai stop
           this.gameState = "Game Over";
           this.showDefeatScreen();
           setTimeout(() => {
             document.getElementById("defeat-screen").style.display = "none";
           }, 3000);
-          console.log("lost");
         }
+        this.ui.addToLog(message);
         this.arena.removeHero(target);
       }
     });
     this.ui.updateUI();
+    //----------------------------------------
   }
 
   runAI(aiHero) {
+    //------------------------------------------
+    //timout pour aplique un delai entre le turn de hero de ai
     setTimeout(() => {
+      //la ai arrete si game over
       if (this.gameState === "playing") {
+        //selection de enemies
         const enemies = this.arena.heroes.filter(
           (hero) => hero !== aiHero && hero.isAlive()
         );
         let closestEnemy = null;
+        //trés grand nombre garentit que mindistence sera changer
         let minDistance = Infinity;
+        //calcule le distence pour chaque enemys
         enemies.forEach((enemy) => {
-          const dist =
+          const distence =
             Math.abs(enemy.position.x - aiHero.position.x) +
             Math.abs(enemy.position.y - aiHero.position.y);
-          if (dist < minDistance) {
-            minDistance = dist;
+          if (distence < minDistance) {
+            minDistance = distence;
+            //la plus proche enemy
             closestEnemy = enemy;
           }
         });
         if (!closestEnemy) return;
+        //selectionner les hero in range
         const attackable = this.arena.getAttackableTargets(aiHero);
+        //slectionner ce qui in range est le plus proche
         const target = attackable.find((t) => t === closestEnemy);
+        //si on a le trouver
         if (target) {
+          //utilise le spetial si il possible
           if (aiHero.currentSpecialCooldown === 0) {
             this.useSpecialAbility();
           }
+          //attaquer le
           this.attack(aiHero, target);
           return;
         }
-
+        //definit les move possibles
         const moves = this.arena.getPossibleMoves(aiHero);
         if (moves.length > 0) {
+          //le premier move est considirer comme une solution jusqu'a en le change par absurdre
           let bestMove = moves[0];
           let moveMinDist = Infinity;
-          for (const move of moves) {
-            const dist =
+          //parcour les movment possible
+          for (let i = 0; i < moves.length; i++) {
+            let move = moves[i];
+            //calcule le distence a partir de cordonner de chaque move
+            const distence =
               Math.abs(move.x - closestEnemy.position.x) +
               Math.abs(move.y - closestEnemy.position.y);
-            if (dist < moveMinDist) {
-              moveMinDist = dist;
+            //prondre la plus petit istence
+            if (distence < moveMinDist) {
+              moveMinDist = distence;
               bestMove = move;
             }
           }
+          //deplacer le hero
           this.arena.moveHero(aiHero, bestMove.x, bestMove.y);
+          let message = "";
+          message = `${aiHero.nameAi} change position`;
+          this.ui.addToLog(message);
         }
         this.endTurn();
       }
     }, 1000);
+    //----------------------------------------
   }
 
   showVictoryScreen() {
-    document.getElementById("hero-selection").style.display = "none";
     document.getElementById("victory-screen").style.display = "flex";
   }
 
   showDefeatScreen() {
-    document.getElementById("hero-selection").style.display = "none";
     document.getElementById("defeat-screen").style.display = "flex";
   }
 
   endGame() {
+    //--------------------------------------
     const winner = this.arena.getWinner();
     if (winner === this.arena.heroes[0]) {
+      //si le winner est le player vicory
       this.showVictoryScreen();
     } else {
+      // si le winner est le ai defeat
       this.showDefeatScreen();
     }
+    //cacher le vic ou def scren apres 3 sec
     setTimeout(() => {
       document.getElementById("victory-screen").style.display = "none";
       document.getElementById("defeat-screen").style.display = "none";
     }, 3000);
+    //---------------------------------------
   }
 }
 
+//istencier le jeu
 document.addEventListener("DOMContentLoaded", () => {
-  const game = new Game();
+  let game = new Game();
 });
+
+// //restart le jeu
+// document.getElementById("reset").addEventListener("click", () => {
+//   let game = new Game();
+// });
+function test() {
+  console.log("test");
+}

@@ -107,7 +107,6 @@ class Arena {
         // on ignore les cas ou la somme de dxdy est a l'exterieur de range
         const newX = x + dx;
         const newY = y + dy;
-
         if (this.isCellEmpty(newX, newY)) {
           moves.push({ x: newX, y: newY });
         }
@@ -144,6 +143,7 @@ class Arena {
   nextTurn() {
     this.currentPlayerIndex =
       (this.currentPlayerIndex + 1) % this.heroes.length;
+    // le pursonpour garentir si on passe nb heros en retour a 0
     //-----------------------------------------
     while (!this.heroes[this.currentPlayerIndex].isAlive()) {
       this.currentPlayerIndex =
@@ -159,8 +159,7 @@ class Arena {
   checkGameOver() {
     //----------------------------
     const aliveHeroes = this.heroes.filter((hero) => hero.isAlive());
-    return (aliveHeroes.length = 1);
-    //si alive heros = 1 le jeu fini
+    return aliveHeroes.length <= 1;
     //-------------------------------
   }
 
