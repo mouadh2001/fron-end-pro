@@ -7,6 +7,13 @@ class Arena {
     this.initializeGrid();
   }
 
+  restarena() {
+    this.heroes = [];
+    this.grid = [];
+    this.currentPlayerIndex = 0;
+    this.initializeGrid();
+  }
+
   initializeGrid() {
     for (let y = 0; y < this.size; y++) {
       this.grid[y] = [];
@@ -123,14 +130,14 @@ class Arena {
     //---------------------------------
     for (let dy = -range; dy <= range; dy++) {
       for (let dx = -range; dx <= range; dx++) {
-        if (dx === 0 && dy === 0) continue;
         // on ignore la posion de hero
+        if (dx === 0 && dy === 0) continue;
         const newX = x + dx;
         const newY = y + dy;
         if (this.isValidPosition(newX, newY)) {
           const target = this.getHeroAt(newX, newY);
+          //si target !null on l'ignore si il est le hero actuel et si le hero est mort
           if (target && target !== hero && target.maxHp > 0) {
-            //si target !null on l'ignore si il est le hero actuel et si le hero est mort
             targets.push(target);
           }
         }
@@ -141,17 +148,17 @@ class Arena {
   }
 
   nextTurn() {
+    //-----------------------------------------
+    // le purson pour garentir si on passe nb heros en retour a 0
     this.currentPlayerIndex =
       (this.currentPlayerIndex + 1) % this.heroes.length;
-    // le pursonpour garentir si on passe nb heros en retour a 0
-    //-----------------------------------------
+    //ignor les hhero mort
     while (!this.heroes[this.currentPlayerIndex].isAlive()) {
       this.currentPlayerIndex =
         (this.currentPlayerIndex + 1) % this.heroes.length;
     }
-    //si le hero de player currnet passe au suivent
-    this.heroes[this.currentPlayerIndex].endTurn();
     //appele au endturn de class hero pour rinsialise le defence attack pour N et K
+    this.heroes[this.currentPlayerIndex].endTurn();
     return this.heroes[this.currentPlayerIndex];
     //--------------------------------------------
   }

@@ -8,6 +8,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-top: 2%;
   gap: 40px;
 }
 
@@ -108,6 +109,23 @@ body {
   align-items: center;
   justify-content: center;
   gap: 10px;
+}
+
+#reset {
+  position: relative;
+  margin-top: 1%;
+  width: 300px;
+  width: 250px;
+  left: 44%;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  background: #fffffe;
+  color: #000000;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 15px;
+  transition: background 0.4s;
 }
 
 .action-buttons button {

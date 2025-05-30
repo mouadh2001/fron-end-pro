@@ -13,6 +13,27 @@ class UI {
     this.setupEventListeners();
     this.renderArena();
   }
+  resetlg() {
+    this.gameLogElement.innerHTML = "";
+  }
+  removelistenenrs() {
+    this.resetlg();
+    const buttons = [
+      "btn-move",
+      "btn-attack",
+      "btn-special",
+      "btn-defend",
+      "btn-end",
+    ];
+    buttons.forEach((id) => {
+      const btn = document.getElementById(id);
+      btn.replaceWith(btn.cloneNode(true));
+    });
+
+    document.querySelectorAll(".hero-option").forEach((option) => {
+      option.replaceWith(option.cloneNode(true));
+    });
+  }
 
   setupEventListeners() {
     //------------------------------
@@ -20,7 +41,7 @@ class UI {
     document.getElementById("btn-move").addEventListener("click", () => {
       this.game.selectAction("move");
     });
-    
+
     document.getElementById("btn-attack").addEventListener("click", () => {
       this.game.selectAction("attack");
     });
@@ -66,7 +87,7 @@ class UI {
         }
         cell.dataset.x = x;
         cell.dataset.y = y;
-          // identifier une indices au cellule de grille
+        // identifier une indices au cellule de grille
 
         if (this.game.arena.grid[y][x].hero) {
           const hero = this.game.arena.grid[y][x].hero;
